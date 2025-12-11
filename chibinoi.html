@@ -1,0 +1,101 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>3D Christmas Tree + Snow + Music</title>
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #000;
+        overflow: hidden;
+    }.tree {
+    position: relative;
+    height: 50vmin;
+    width: 25vmin;
+    transform-style: preserve-3d;
+    animation: spin 2s infinite linear;
+}
+
+@keyframes spin {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(360deg); }
+}
+
+.light {
+    --i: 0;
+    position: absolute;
+    height: 1vmin;
+    width: 1vmin;
+    border-radius: 50%;
+    background: var(--color);
+    bottom: calc(var(--i) * 2%);
+    left: 50%;
+    transform-style: preserve-3d;
+    transform: 
+        translateX(-50%) 
+        rotateY(calc(var(--i) * 15deg))
+        translateZ(calc(var(--i) * 0.5vmin));
+}
+
+.star {
+    position: absolute;
+    top: -4vmin;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 4vmin;
+    color: gold;
+}
+
+/* Snow effect */
+.snowflake {
+    position: fixed;
+    top: -10px;
+    color: white;
+    font-size: 1rem;
+    user-select: none;
+    pointer-events: none;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    to { transform: translateY(110vh); opacity: 0; }
+}
+
+</style>
+</head>
+<body><audio autoplay loop>
+    <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Scott_Holmes_Music/Christmas_Magic/Scott_Holmes_Music_-_Christmas_Magic.mp3" type="audio/mpeg">
+</audio><div class="tree">
+    <div class="star">⭐</div>
+</div><script>
+    // Tree lights
+    let tree = document.querySelector(".tree");
+    for (let i = 1; i <= 60; i++) {
+        let dot = document.createElement("div");
+        dot.className = "light";
+        dot.style.setProperty("--i", i);
+        dot.style.setProperty("--color", Math.random() > 0.5 ? "red" : "white");
+        tree.appendChild(dot);
+    }
+
+    // Snow effect
+    function createSnowflake() {
+        const snowflake = document.createElement("div");
+        snowflake.classList.add("snowflake");
+        snowflake.textContent = "❄";
+        snowflake.style.left = Math.random() * 100 + "vw";
+        snowflake.style.fontSize = Math.random() * 10 + 10 + "px";
+        snowflake.style.animationDuration = Math.random() * 5 + 5 + "s";
+        document.body.appendChild(snowflake);
+
+        setTimeout(() => {
+            snowflake.remove();
+        }, 10000);
+    }
+
+    setInterval(createSnowflake, 150);
+</script></body>
+</html>
