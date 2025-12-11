@@ -1,101 +1,164 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="th">
 <head>
-<meta charset="UTF-8">
-<title>3D Christmas Tree + Snow + Music</title>
-<style>
-    body {
-        margin: 0;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: #000;
-        overflow: hidden;
-    }.tree {
-    position: relative;
-    height: 50vmin;
-    width: 25vmin;
-    transform-style: preserve-3d;
-    animation: spin 2s infinite linear;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christmas Butterfly Tree</title>
+    <style>
+        /* ตั้งค่าพื้นฐาน */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            /* พื้นหลังสีฟ้าอ่อนเหมือนในภาพ */
+            background-color: #ADD8E6; 
+            overflow: hidden; /* ซ่อนส่วนเกิน */
+            font-family: Arial, sans-serif;
+        }
 
-@keyframes spin {
-    from { transform: rotateY(0deg); }
-    to { transform: rotateY(360deg); }
-}
+        /* 🦋 พื้นหลังผีเสื้อ (จำลองด้วยเงาและสี) */
+        .butterfly-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* ใช้ Radial Gradient เพื่อสร้างจุดสีดำ/น้ำตาลอ่อน ๆ กระจายตัวคล้ายผีเสื้อ */
+            background-image: radial-gradient(circle at 10% 20%, rgba(0,0,0,0.1) 2px, transparent 3px),
+                              radial-gradient(circle at 70% 80%, rgba(0,0,0,0.15) 3px, transparent 4px),
+                              radial-gradient(circle at 50% 50%, rgba(0,0,0,0.08) 2px, transparent 3px);
+            background-size: 200px 200px, 150px 150px, 250px 250px;
+            /* เพิ่มแอนิเมชันให้พื้นหลังเคลื่อนไหวช้าๆ */
+            animation: moveBackground 60s linear infinite;
+            z-index: 1;
+        }
 
-.light {
-    --i: 0;
-    position: absolute;
-    height: 1vmin;
-    width: 1vmin;
-    border-radius: 50%;
-    background: var(--color);
-    top: calc(var(--i) * 2%);
-    left: 50%;
-    transform-style: preserve-3d;
-    transform: 
-        translateX(-50%) 
-        rotateY(calc(var(--i) * 15deg))
-        translateZ(calc(var(--i) * 0.5vmin));
-}
+        /* แอนิเมชันให้พื้นหลังเคลื่อนไหวช้าๆ */
+        @keyframes moveBackground {
+            0% { background-position: 0 0, 0 0, 0 0; }
+            100% { background-position: 2000px 2000px, -1500px 1500px, 1000px -1000px; }
+        }
 
-.star {
-    position: absolute;
-    top: -4vmin;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 4vmin;
-    color: gold;
-}
+        /* 🎄 ต้นคริสต์มาส */
+        .christmas-tree {
+            position: relative;
+            z-index: 10;
+            width: 300px;
+            height: 300px;
+            transform-style: preserve-3d;
+            /* แอนิเมชันการหมุน */
+            animation: spinTree 10s linear infinite;
+        }
 
-/* Snow effect */
-.snowflake {
-    position: fixed;
-    top: -10px;
-    color: white;
-    font-size: 1rem;
-    user-select: none;
-    pointer-events: none;
-    animation: fall linear infinite;
-}
+        /* แอนิเมชันการหมุนของต้นไม้ */
+        @keyframes spinTree {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
 
-@keyframes fall {
-    to { transform: translateY(110vh); opacity: 0; }
-}
+        /* สร้างรูปสามเหลี่ยมต้นไม้ (โคน) */
+        .cone {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 100px solid transparent;
+            border-right: 100px solid transparent;
+            /* สีเขียวแบบมี Gradient อ่อนๆ */
+            border-bottom: 250px solid rgba(46, 204, 113, 0.9);
+        }
 
-</style>
+        /* 🌟 ดาวบนยอด */
+        .star {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            width: 0;
+            height: 0;
+            border-right: 15px solid transparent;
+            border-left: 15px solid transparent;
+            border-bottom: 25px solid gold;
+            z-index: 15;
+            /* สร้างดาว 5 แฉกง่ายๆ ด้วย CSS */
+            box-shadow: 0 0 10px gold, 0 0 20px gold;
+        }
+
+        .star::after {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: -15px;
+            border-right: 15px solid transparent;
+            border-left: 15px solid transparent;
+            border-top: 25px solid gold;
+        }
+
+        /* 🦋 ผีเสื้อที่ห้อยลงมาจากต้นไม้ (จำลองด้วยเส้นและจุด) */
+        .butterfly-line {
+            position: absolute;
+            width: 1px;
+            height: 250px;
+            background: rgba(0, 0, 0, 0.3); /* เส้นบางๆ */
+            transform-origin: top center;
+        }
+
+        /* วางเส้นผีเสื้อรอบต้นไม้ */
+        .line-1 { transform: rotateY(0deg) translateZ(100px); }
+        .line-2 { transform: rotateY(45deg) translateZ(100px); }
+        .line-3 { transform: rotateY(90deg) translateZ(100px); }
+        .line-4 { transform: rotateY(135deg) translateZ(100px); }
+        .line-5 { transform: rotateY(180deg) translateZ(100px); }
+        .line-6 { transform: rotateY(225deg) translateZ(100px); }
+        .line-7 { transform: rotateY(270deg) translateZ(100px); }
+        .line-8 { transform: rotateY(315deg) translateZ(100px); }
+
+        /* จุดผีเสื้อที่ปลายสาย */
+        .butterfly-line::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #990000; /* สีแดง/ดำแทนผีเสื้อ */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* ข้อความ Butterflies */
+        .caption {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            text-shadow: 1px 1px 2px #fff;
+            z-index: 20;
+        }
+    </style>
 </head>
-<body><audio autoplay loop>
-    <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Scott_Holmes_Music/Christmas_Magic/Scott_Holmes_Music_-_Christmas_Magic.mp3" type="audio/mpeg">
-</audio><div class="tree">
-    <div class="star">⭐</div>
-</div><script>
-    // Tree lights
-    let tree = document.querySelector(".tree");
-    for (let i = 1; i <= 60; i++) {
-        let dot = document.createElement("div");
-        dot.className = "light";
-        dot.style.setProperty("--i", i);
-        dot.style.setProperty("--color", Math.random() > 0.5 ? "red" : "white");
-        tree.appendChild(dot);
-    }
-
-    // Snow effect
-    function createSnowflake() {
-        const snowflake = document.createElement("div");
-        snowflake.classList.add("snowflake");
-        snowflake.textContent = "❄";
-        snowflake.style.left = Math.random() * 100 + "vw";
-        snowflake.style.fontSize = Math.random() * 10 + 10 + "px";
-        snowflake.style.animationDuration = Math.random() * 5 + 5 + "s";
-        document.body.appendChild(snowflake);
-
-        setTimeout(() => {
-            snowflake.remove();
-        }, 10000);
-    }
-
-    setInterval(createSnowflake, 150);
-</script></body>
+<body>
+    <div class="butterfly-background"></div>
+    <div class="christmas-tree">
+        <div class="star"></div>
+        <div class="cone"></div>
+        <div class="butterfly-line line-1"></div>
+        <div class="butterfly-line line-2"></div>
+        <div class="butterfly-line line-3"></div>
+        <div class="butterfly-line line-4"></div>
+        <div class="butterfly-line line-5"></div>
+        <div class="butterfly-line line-6"></div>
+        <div class="butterfly-line line-7"></div>
+        <div class="butterfly-line line-8"></div>
+    </div>
+    <div class="caption">Butterflies</div>
+</body>
 </html>
